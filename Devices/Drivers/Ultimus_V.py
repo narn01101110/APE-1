@@ -87,9 +87,9 @@ class Ultimus_V_Pump:
             if kwargs['trigger'].lower() == 'do':
                 self.trigger = "DO"
                 try:
-                    from A3200 import A3200  # noqa: F401
+                    from .A3200_RoboDaddy import A3200  # noqa: F401
 
-                    self.A3200 = kwargs['A3200']
+                    self.A3200 = A3200()
                     self.trigger_bit = kwargs['bit']
                     self.trigger_axis = kwargs['axis']
                 except KeyError:
@@ -332,10 +332,10 @@ class Ultimus_V_Pump:
                 self.dispensing = not self.dispensing
         if self.trigger == 'DO':
             if self.dispensing:
-                if self.A3200.DO(self.trigger_bit, self.trigger_axis, False):
+                if self.A3200.DO(self.trigger_axis, self.trigger_bit, False):
                     self.dispensing = False
             else:
-                if self.A3200.DO(self.trigger_bit, self.trigger_axis, True):
+                if self.A3200.DO(self.trigger_axis, self.trigger_bit, True):
                     self.dispensing = True
 
     def startPump(self):
