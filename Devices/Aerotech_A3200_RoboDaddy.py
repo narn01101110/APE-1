@@ -408,7 +408,6 @@ class Aerotech_A3200_RoboDaddy(Motion, Sensor):
         )
 
         self.fRun(motionmode, task)
-
         return self.returnlog()
 
     def MotionCMD(self, point, speed, motiontype):

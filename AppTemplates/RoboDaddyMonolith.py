@@ -25,20 +25,11 @@ def RoboDaddyMonolith(apparatus, materials, tools):
         details = {
             'pressure': 0,
             'vacuum': 0,
+            'IOaxis': 'A',
+            'IObit': 2,
+            'COM': 7,
         }
         apparatus.add_device_entry(f'pump{n}', 'Nordson_UltimusV', details)
-        """
-        details = {
-            'type': 'Nordson_UltimusV_A3200',
-            'pumpname': f'pump{n}',
-            'A3200name': 'gantry',
-            'IOaxis': 'ZZ1',
-            'IObit': 2,
-            'pressure': 0,
-            'vacuum': 0,
-        }
-        apparatus.add_device_entry(f'aeropump{n}', 'Nordson_UltimusV_A3200', details)
-        """
         n += 1
     # Create entries for tools
     for tool in tools:

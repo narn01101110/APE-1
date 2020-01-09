@@ -21,20 +21,18 @@ AppBuilder(MyApparatus, materials, tools)
 # Define the rest of the apparatus
 mat0 = list(materials[0])[0]
 MyApparatus['devices']['n' + mat0]['descriptors'].append(mat0)
-MyApparatus['devices']['n' + mat0]['trace_height'] = 5
-MyApparatus['devices']['n' + mat0]['trace_width'] = 0.3
-MyApparatus['devices']['gantry']['default']['speed'] = 1  # change the slide default from 40 to 20
-MyApparatus['devices']['gantry']['n' + mat0]['speed'] = 1  # Calibration is on so this is overwritten
+MyApparatus['devices']['n' + mat0]['trace_height'] = 0.5
+MyApparatus['devices']['n' + mat0]['trace_width'] = 0.61
+MyApparatus['devices']['gantry']['default']['speed'] = 10  # change the slide default from 40 to 20
+MyApparatus['devices']['gantry']['n' + mat0]['speed'] = 10  # Calibration is on so this is overwritten
 MyApparatus['devices']['pump0']['descriptors'].append(mat0)
 MyApparatus['devices']['pump0']['pumpon_time'] = 0.0  # Time from pump on to motion, if calibration is on so this is overwritten
 MyApparatus['devices']['pump0']['mid_time'] = 0.0  # time from signal sent to motion initiation
 MyApparatus['devices']['pump0']['pumpoff_time'] = 0.0  # time from end-arrival to turn off pump
 MyApparatus['devices']['pump0']['pumpres_time'] = 0.0
-MyApparatus['devices']['pump0']['pressure'] = 10
+MyApparatus['devices']['pump0']['pressure'] = 20
 MyApparatus['devices']['pump0']['vacuum'] = 0
-MyApparatus['devices']['pump0']['COM'] = 7
-MyApparatus['devices']['pump0']['trigger'] = 'com'
-
+MyApparatus['devices']['pump0']['trigger'] = 'com' # Could be set to 'DO' or 'com'
 
 # Connect to all the devices in the setup
 #MyApparatus.Connect_All(simulation=True)
@@ -45,21 +43,19 @@ information = MyApparatus['information']
 proclog = MyApparatus['proclog']
 
 # Setup information
-MyApparatus['information']['materials'][mat0] = {'density': 1.92, 'details': 'Measured', 'calibrated': False}  # changed from density = 1.048
+MyApparatus['information']['materials'][mat0] = {'density': 1.18, 'details': 'Measured', 'calibrated': False}  # changed from density = 1.048
 MyApparatus['information']['materials'][mat0]['do_speedcal'] = True
 MyApparatus['information']['materials'][mat0]['do_pumpcal'] = False
-MyApparatus['information']['ink calibration']['time'] = 10
+MyApparatus['information']['ink calibration']['time'] = 60
 
 # Setup toolpath generation and run a default
 GenTP = Procedures.Toolpath_Generate(MyApparatus, MyExecutor)
 GenTP.setMaterial(mat0)
-GenTP.setGenerator('Ros3daTPGen')
-#GenTP.setGenerator('MecodeTPGen')
+#GenTP.setGenerator('Ros3daTPGen')
+GenTP.setGenerator('MecodeTPGen')
 #GenTP.setGenerator('TemplateTPGen')
 GenTP.setParameters()  # Creates the parameter structure for TPGen
 TP_gen = MyApparatus['information']['ProcedureData']['Toolpath_Generate']
-TP_gen['parameters']['tiph'] = 4
-TP_gen['parameters']['length'] = 5
 
 # Create instances of the procedures that will be used
 # Procedures that will almost always be used at this level
@@ -70,7 +66,6 @@ PrintTP = Procedures.Toolpath_Print(MyApparatus, MyExecutor)
 TraySetup = Procedures.SampleTray_XY_Setup(MyApparatus, MyExecutor)
 TrayRun = Procedures.SampleTray_Start(MyApparatus, MyExecutor)
 Planner = Procedures.Planner_Combinatorial(MyApparatus, MyExecutor)
-
 
 class Sample(Core.Procedure):
     def Prepare(self):
@@ -108,4 +103,5 @@ TrayRun.requirements['tray']['address'] = ['information', 'ProcedureData', 'Samp
 TrayRun.Do({'procedure': Sample(MyApparatus, MyExecutor)})
 MyApparatus.Disconnect_All()
 toolpath = TP_gen['toolpath'][0]
+print(toolpath)
 #toolpath_parsed = tpt.parse_endofmotion(toolpath, 1E-12)

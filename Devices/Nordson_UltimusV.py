@@ -23,6 +23,24 @@ class Nordson_UltimusV(Pump):
             'address': '',
             'desc': 'Serial COM port to communcate through',
         }
+        self.requirements['Connect']['trigger'] = {
+            'value': '',
+            'source': 'apparatus',
+            'address': '',
+            'desc': 'How to trigger extrusion, either com or DO',
+        }
+        self.requirements['Connect']['IOaxis'] = {
+            'value': '',
+            'source': 'apparatus',
+            'address': '',
+            'desc': 'IO axis on A3200',
+        }
+        self.requirements['Connect']['IObit'] = {
+            'value': '',
+            'source': 'apparatus',
+            'address': '',
+            'desc': 'bit on the IO axis being used',
+        }
         self.requirements['Set']['pressure'] = {
             'value': '',
             'source': 'apparatus',
@@ -49,6 +67,7 @@ class Nordson_UltimusV(Pump):
             'address': '',
             'desc': 'time to wait before turning off pump',
         }
+
         self.pressure = 0
         self.vacuum = 0
         self.driver_address = ''
@@ -88,12 +107,11 @@ class Nordson_UltimusV(Pump):
         self.addlog(self.name + ' will turn off in ' + str(delay) + ' s.')
         self.on = False
         return self.returnlog()
-
-    def Connect(self, COM=''):
+        
+    def Connect(self, COM='',trigger='',IOaxis='',IObit=''):
         if not self.simulation:
             from Devices.Drivers import Ultimus_V as UltimusV
-
-            self.driver_address = UltimusV.Ultimus_V_Pump(COM)
+            self.driver_address = UltimusV.Ultimus_V_Pump(COM,trigger=trigger,axis=IOaxis,bit=IObit)
 
         self.addlog('Ultimus ' + self.name + ' is connected on port ' + str(COM))
 
