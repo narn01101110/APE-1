@@ -97,7 +97,7 @@ class startape ( ):
             #check if windows OS is new enough to run APE on auto
             basefolder = 'C:\Program Files'
             apefolder = 'C:\Program Files\APE-Master'
-            appsfolder = 'C:\path\to\start\menu????????????'
+            appsfolder = 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs'
             apedesktoploc = '%s\APE.bat' % ( appsfolder )
             pythonloc = self.searchfile ( 'python.exe', 'C:' )
             whereami = pathlib.Path ( __file__ ).parent.absolute ( )
@@ -134,7 +134,7 @@ class startape ( ):
         #print ( whereami )
 
 
-
+print ( os.path.expanduser ( '~' ) )
 pythonloc = startape.searchfile ( None, 'python.py', '/' )
 apefolder = 'C:\Program Files\APE-Master'
 apepy = r'%s\UI_monolith.py' % ( apefolder )
